@@ -3,11 +3,16 @@ import javax.swing.*;
 public class Imagen extends JLabel implements Runnable {
 
     ImageIcon icon;
-    String url,url2;
+    String url, url2;
+    int time, posY;
 
-    public Imagen(String url, String url2) {
+    public Imagen(String url, String url2, Integer time, Integer posY) {
+
         this.url = url;
         this.url2 = url2;
+        this.time = time;
+        this.posY = posY;
+
         icon = new ImageIcon(this.getClass().getResource(url));
         setIcon(icon);
 
@@ -22,12 +27,10 @@ public class Imagen extends JLabel implements Runnable {
                 icon = new ImageIcon(this.getClass().getResource(url));
             }
             setIcon(icon);
-            setBounds(x,40,42,42);
-
+            setBounds(x,posY,42,42);
             try {
-                Thread.sleep(200);
+                Thread.sleep(time);
             } catch (Exception e) {
-                // TODO: handle exception
             }
         }
 
