@@ -26,7 +26,15 @@ public void keyPressed(KeyEvent ke) {
     if (runStatus) {
         if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
             posX++;
-            setBounds(posX++, 80,42,42);
+
+            if ((posX % 2) != 0) {
+                icon = new ImageIcon(this.getClass().getResource(url2));
+            } else {
+                icon = new ImageIcon(this.getClass().getResource(url1));
+            }
+
+            setBounds(posX, 80,42,42);
+            setIcon(icon);
          }
     }
 }
