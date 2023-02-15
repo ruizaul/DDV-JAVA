@@ -15,7 +15,6 @@ public class Imagen extends JLabel implements Runnable {
 
         icon = new ImageIcon(this.getClass().getResource(url));
         setIcon(icon);
-
     }
 
     public void run() {
