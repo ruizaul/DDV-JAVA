@@ -17,7 +17,7 @@ public class Fondo extends JLabel implements Runnable {
     public void run() {
 
         
-
+        
     }
 
 
