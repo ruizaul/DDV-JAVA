@@ -1,30 +1,61 @@
-
 import javax.swing.*;
 import java.awt.event.*;
 
 public class Personaje extends JLabel implements Runnable,KeyListener{
-    private String url1,url2;
-    private int posX=10,posXBack=0;
+    
+    private String url1,url2,url3;
+    private int posX=10,posXBack=0,y=174;
     private ImageIcon icon;
-    private boolean changeImg=false,runStatus=false,right=false,shift=false;
+    private boolean changeImg=false,runStatus=false,right=false,shift=false,up=false;
     JLabel background;
 
-    public Personaje(String url1,String url2){
+    public Personaje(String url1,String url2,String url3){
         this.url1=url1;
         this.url2=url2;
+        this.url3=url3;
         icon=new ImageIcon(this.getClass().getResource(url1));
         setIcon(icon);
     }
-
     public void run(){
         runStatus=true;
         while(true){
             System.out.println("while");            
-            if(right&&shift){moveImage(20, 40);}
-            if(right){moveImage(1,100);}
-        }
+            if(right&&shift){moveImage(10, 40);}
+            else if(right){moveImage(3,100);}
+            if(shift&right&up){saltote(10, 100);}
+            if(right&&up){saltote(3,20);}
+            if(up){saltito(20);}
+        }//end while
+    }//end run
+    private void saltito(int time){
+        for (y=174; y >=150; y--) {
+            moveImage(1, time);
+            setBounds(posX,y,42,42);
+            try {Thread.sleep(time);} catch (Exception e) {}
+        }//end for UP
+        for (y=getY(); y <=173; y++) {
+            moveImage(0, time);
+            setBounds(posX,y,42,42);
+            try {Thread.sleep(time);} catch (Exception e) {}
+        }//end for DOWN
+        changeImage(time);
     }
-    private void moveImage(int power,int time){
+    private void saltote(int power,int time){
+        for (y=174; y>=150; y-=power) {
+            //posX+=power;
+            moveImage(power, time);
+            setBounds(posX,y,42,42);
+            try {Thread.sleep(time);} catch (Exception e) {}
+        }//end UP
+        for (y=getY(); y<=173; y+=power) {
+            //posX+=power;
+            moveImage(power, time);
+            setBounds(posX,y,42,42);
+            try {Thread.sleep(time);} catch (Exception e) {}
+        }
+        //changeImage(time);
+    }//end saltote
+    private void changeImage(int time){
         if(changeImg){
             icon=new ImageIcon(this.getClass().getResource(url1));
             changeImg=false;
@@ -32,36 +63,38 @@ public class Personaje extends JLabel implements Runnable,KeyListener{
             icon=new ImageIcon(this.getClass().getResource(url2));
             changeImg=true;
         }
-        if(posX>=120 && posXBack>=-500){
-            posXBack-=power;
-            background.setBounds(posXBack,0,10000,400);
-            setBounds(120,174,42,42);
-        }else if(posX<=263){            
-            posX+=power;            
-            setBounds(posX,174,42,42);
-            System.out.println(posX);
-        }
+        
         setIcon(icon);
-        try {
-            Thread.sleep(time);
-        } catch (Exception e) {
-            
+        try {Thread.sleep(time);} catch (Exception e) {}
+    }//end moveImage
+    private void moveImage(int power, int time){
+        if(posX >= 120 && posXBack >= -800 && right){
+            posXBack-=power;
+            background.setBounds(posXBack,-596,3840,1080);
+            setBounds(posX,y,42,42);
+
+        }else if(posX<=263 && right){            
+            posX+=power;            
+            setBounds(posX,y,42,42);            
         }
+        if(up || (y<=173)){
+            icon=new ImageIcon(this.getClass().getResource(url3));
+            setIcon(icon);
+        }else{
+            changeImage(time);}
+        
     }
-
     public void keyTyped(KeyEvent ke){}
-
     public void keyPressed(KeyEvent ke){
         if(runStatus){
             if(ke.getKeyCode()==KeyEvent.VK_RIGHT){right=true;}
-
             if(ke.getKeyCode()==KeyEvent.VK_SHIFT){shift=true;}
+            if(ke.getKeyCode()==KeyEvent.VK_UP){up=true;}
         }
-    }
-
+    }//end keyPressed
     public void keyReleased(KeyEvent ke){
         if(ke.getKeyCode()==KeyEvent.VK_RIGHT){right=false;}
-
         if(ke.getKeyCode()==KeyEvent.VK_SHIFT){shift=false;}
+        if(ke.getKeyCode()==KeyEvent.VK_UP){up=false;}
     }
 }
